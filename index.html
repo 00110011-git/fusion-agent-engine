@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Fusion Research Agent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f5f5f5;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      padding: 12px 20px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover {
+      background: #333;
+    }
+    pre {
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      max-width: 100%;
+      overflow-x: auto;
+      border: 1px solid #ddd;
+      white-space: pre-wrap;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Fusion Research Agent</h1>
+  <p>Enter any topic, question, or research request. This agent will query multiple search engines and return structured results.</p>
+
+  <label>Search Query</label>
+  <input id="query" placeholder="e.g. best flights from Toronto to NYC, physics of quantum tunneling, NHL predictions, etc." />
+
+  <button id="ask">Run Search</button>
+
+  <h2>Results</h2>
+  <pre id="out">No results yet...</pre>
+
+<script>
+document.getElementById("ask").onclick = async () => {
+  const q = document.getElementById("query").value.trim();
+  if (!q) {
+    alert("Enter a query.");
+    return;
+  }
+
+  document.getElementById("out").textContent = "Thinking...";
+
+  try {
+    const res = await fetch("/api/answer?q=" + encodeURIComponent(q));
+    const json = await res.json();
+    document.getElementById("out").textContent =
+      JSON.stringify(json, null, 2);
+  } catch (err) {
+    document.getElementById("out").textContent =
+      "Error: " + err.message;
+  }
+};
+</script>
+
+</body>
+</html>
